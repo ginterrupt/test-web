@@ -337,12 +337,14 @@
            RESPONSIVE
         ════════════════════════════════════════ */
         @media (max-width: 1024px) {
-            .gallery-strip { height: 400px; }
-            .strip-item.active { flex: 3.8; }
+            .gallery-strip { height: 420px; }
+            .strip-item.active { flex: 4.5; }
         }
         @media (max-width: 720px) {
-            .gallery-strip { height: 320px; }
-            .strip-item.active { flex: 3.5; }
+            .gallery-strip { height: 400px; }
+            .gallery-outer { padding: 0 12px; }
+            .strip-item { flex: 0.8; }
+            .strip-item.active { flex: 6; }
             .strip-caption-name { font-size: 0.68rem; }
             .orbit-wrapper { width: 420px; height: 420px; }
             .orbit-ring { width: 320px; height: 320px; }
@@ -359,8 +361,10 @@
             .timer-frame { padding: 32px 24px; }
         }
         @media (max-width: 520px) {
-            .gallery-strip { height: 260px; gap: 3px; }
-            .strip-item.active { flex: 3.2; }
+            .gallery-strip { height: 460px; gap: 3px; }
+            .gallery-outer { padding: 0 8px; }
+            .strip-item { flex: 0.6; }
+            .strip-item.active { flex: 9; }
             .strip-caption-name { font-size: 0.58rem; }
             .orbit-wrapper { width: 340px; height: 340px; }
             .orbit-ring { width: 260px; height: 260px; }
@@ -668,7 +672,7 @@
         if (n <  0) { dir =  1; n = 1; }
         setActive(n);
     }
-    function startAuto() { autoId = setInterval(step, 4500); }
+    function startAuto() { autoId = setInterval(step, 8500); }
     function stopAuto()  { clearInterval(autoId); }
     strip.addEventListener('mouseenter', stopAuto);
     strip.addEventListener('mouseleave', startAuto);
