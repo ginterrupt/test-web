@@ -1,4 +1,4 @@
-name: Deploy Second Site to Hetzner
+name: Deploy Second Site
 
 on:
   push:
