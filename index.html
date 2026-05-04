@@ -341,10 +341,10 @@
             .strip-item.active { flex: 4.5; }
         }
         @media (max-width: 720px) {
-            .gallery-strip { height: 400px; }
+            .gallery-strip { height: 470px; gap: 3px; }
             .gallery-outer { padding: 0 12px; }
-            .strip-item { flex: 0.8; }
-            .strip-item.active { flex: 6; }
+            .strip-item { flex: 0 0 20px; min-width: 20px; }
+            .strip-item.active { flex: 1 1 0; min-width: 0; }
             .strip-caption-name { font-size: 0.68rem; }
             .orbit-wrapper { width: 420px; height: 420px; }
             .orbit-ring { width: 320px; height: 320px; }
@@ -361,10 +361,10 @@
             .timer-frame { padding: 32px 24px; }
         }
         @media (max-width: 520px) {
-            .gallery-strip { height: 460px; gap: 3px; }
-            .gallery-outer { padding: 0 8px; }
-            .strip-item { flex: 0.6; }
-            .strip-item.active { flex: 9; }
+            .gallery-strip { height: 550px; gap: 2px; }
+            .gallery-outer { padding: 0 6px; }
+            .strip-item { flex: 0 0 13px; min-width: 13px; }
+            .strip-item.active { flex: 1 1 0; min-width: 0; }
             .strip-caption-name { font-size: 0.58rem; }
             .orbit-wrapper { width: 340px; height: 340px; }
             .orbit-ring { width: 260px; height: 260px; }
@@ -434,7 +434,7 @@
                     <div class="strip-caption-name">ZAK</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">01 / 08</div>
+                <div class="strip-badge">01 / 10</div>
             </div>
 
             <div class="strip-item" data-idx="1">
@@ -447,7 +447,7 @@
                     <div class="strip-caption-name">GUDUNA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">02 / 08</div>
+                <div class="strip-badge">02 / 10</div>
             </div>
 
 
@@ -462,7 +462,7 @@
                     <div class="strip-caption-name">LALU</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">03 / 08</div>
+                <div class="strip-badge">03 / 10</div>
             </div>
 
             <div class="strip-item" data-idx="3">
@@ -475,7 +475,7 @@
                     <div class="strip-caption-name">MAKA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">04 / 08</div>
+                <div class="strip-badge">04 / 10</div>
             </div>
             
             <div class="strip-item" data-idx="6">
@@ -488,7 +488,7 @@
                     <div class="strip-caption-name">XEO</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">05 / 08</div>
+                <div class="strip-badge">05 / 10</div>
             </div>
             
             <div class="strip-item" data-idx="5">
@@ -501,7 +501,7 @@
                     <div class="strip-caption-name">TSURAMA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">06 / 08</div>
+                <div class="strip-badge">06 / 10</div>
             </div>
 
             <div class="strip-item" data-idx="1">
@@ -514,7 +514,7 @@
                     <div class="strip-caption-name">TAVA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">07 / 08</div>
+                <div class="strip-badge">07 / 10</div>
             </div>
 
             <div class="strip-item" data-idx="3">
@@ -527,9 +527,32 @@
                     <div class="strip-caption-name">AMOAMO</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">08 / 08</div>
+                <div class="strip-badge">08 / 10</div>
             </div>
-
+            <div class="strip-item" data-idx="3">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
+                <img class="strip-photo-img" src="guga.jpeg" alt="" loading="lazy">
+                <div class="strip-num">04</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">GUGA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">09 / 10</div>
+            </div>
+                        <div class="strip-item" data-idx="3">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
+                <img class="strip-photo-img" src="kaxa.jpeg" alt="" loading="lazy">
+                <div class="strip-num">04</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">KAXA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">10 / 10</div>
+            </div>
 
 
 
