@@ -696,28 +696,37 @@
         if (e.key === 'ArrowRight') setActive(cur + 1);
     });
 
-    /* Touch swipe */
-    let tx = 0;
-    strip.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
-    strip.addEventListener('touchend',   e => {
-        const dx = e.changedTouches[0].clientX - tx;
-        if (Math.abs(dx) > 40) setActive(cur + (dx < 0 ? 1 : -1));
-    });
-
     /* Auto-advance */
-    let autoId, dir = 1;
+    const DELAY = 8500;
+    let autoId, dir = 1, lastTouch = 0;
+
     function step() {
         let n = cur + dir;
         if (n >= N) { dir = -1; n = N - 2; }
         if (n <  0) { dir =  1; n = 1; }
         setActive(n);
     }
-    function startAuto() { autoId = setInterval(step, 8500); }
+    function startAuto() { clearInterval(autoId); autoId = setInterval(step, DELAY); }
     function stopAuto()  { clearInterval(autoId); }
-    strip.addEventListener('mouseenter', stopAuto);
-    strip.addEventListener('mouseleave', startAuto);
-    strip.addEventListener('touchstart', stopAuto, { passive: true });
-    strip.addEventListener('touchend',   () => setTimeout(startAuto, 6000), { passive: true });
+
+    /* Desktop: pause on hover */
+    strip.addEventListener('mouseenter', () => { if (Date.now() - lastTouch > 800) stopAuto(); });
+    strip.addEventListener('mouseleave', () => { if (Date.now() - lastTouch > 800) startAuto(); });
+
+    /* Touch swipe + restart — merged into one pair of handlers */
+    let tx = 0;
+    strip.addEventListener('touchstart', e => {
+        lastTouch = Date.now();
+        tx = e.touches[0].clientX;
+        stopAuto();
+    }, { passive: true });
+    strip.addEventListener('touchend', e => {
+        lastTouch = Date.now();
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 40) setActive(cur + (dx < 0 ? 1 : -1));
+        setTimeout(startAuto, DELAY);
+    }, { passive: true });
+
     startAuto();
 })();
 </script>
