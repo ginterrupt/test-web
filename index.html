@@ -413,8 +413,8 @@
 <!-- ═══════════ GALLERY ═══════════ -->
 <section class="gallery-section">
     <div class="gallery-header">
-        <div class="section-tag">// GALLERY</div>
-        <h2 class="section-title">MOMENTS OF THE EVENING</h2>
+        <div class="section-tag">// TABLE</div>
+        <h2 class="section-title">HEROES OF THE EVENING</h2>
     </div>
 
     <div class="gallery-outer">
@@ -560,7 +560,9 @@
     <div class="timer-frame">
         <div class="timer-frame-inner">
             <div class="timer-display">
-                <div class="timer-unit"><div class="timer-digits" id="t-hours">46</div><div class="timer-unit-label">Hours</div></div>
+                <div class="timer-unit"><div class="timer-digits" id="t-days">00</div><div class="timer-unit-label">Days</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-hours">00</div><div class="timer-unit-label">Hours</div></div>
                 <div class="timer-sep">:</div>
                 <div class="timer-unit"><div class="timer-digits" id="t-minutes">00</div><div class="timer-unit-label">Minutes</div></div>
                 <div class="timer-sep">:</div>
@@ -583,17 +585,19 @@
 <script>
 /* ── COUNTDOWN ── */
 (function () {
-    const end = Date.now() + 46 * 60 * 60 * 1000;
+    const end = new Date(2026, 4, 8, 19, 0, 0).getTime(); // May 8, 2026 — 19:00
+    const elD = document.getElementById('t-days');
     const elH = document.getElementById('t-hours');
     const elM = document.getElementById('t-minutes');
     const elS = document.getElementById('t-seconds');
     const pad = n => String(n).padStart(2, '0');
     function tick() {
         const t = Math.max(0, Math.floor((end - Date.now()) / 1000));
-        elH.textContent = pad(Math.floor(t / 3600));
+        elD.textContent = pad(Math.floor(t / 86400));
+        elH.textContent = pad(Math.floor((t % 86400) / 3600));
         elM.textContent = pad(Math.floor((t % 3600) / 60));
         elS.textContent = pad(t % 60);
-        if (!t) [elH, elM, elS].forEach(el => el.classList.add('timer-ended'));
+        if (!t) [elD, elH, elM, elS].forEach(el => el.classList.add('timer-ended'));
     }
     tick();
     setInterval(tick, 1000);
