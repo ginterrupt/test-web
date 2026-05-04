@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE GATHERING — Private Event</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --gold:    #d4af37;
+            --cyan:    #00f5ff;
+            --purple:  #9d4edd;
+            --bg:      #04040e;
+            --card-bg: rgba(8,8,24,0.9);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg);
+            color: #e8e8f0;
+            font-family: 'Rajdhani', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                linear-gradient(rgba(0,245,255,0.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,245,255,0.025) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none; z-index: 0;
+        }
+        body::after {
+            content: '';
+            position: fixed; inset: 0;
+            background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.04) 2px, rgba(0,0,0,0.04) 4px);
+            pointer-events: none; z-index: 200;
+        }
+
+        .ambient { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; }
+        .ambient-1 { width: 70vw; height: 70vw; top: -20%; left: -20%; background: radial-gradient(circle, rgba(157,78,221,0.07) 0%, transparent 65%); }
+        .ambient-2 { width: 60vw; height: 60vw; bottom: -10%; right: -10%; background: radial-gradient(circle, rgba(0,245,255,0.05) 0%, transparent 65%); }
+
+        .particle { position: fixed; width: 2px; height: 2px; border-radius: 50%; pointer-events: none; z-index: 1; }
+        .particle-gold { background: var(--gold); animation: pfloat var(--d) ease-in-out var(--delay) infinite; }
+        .particle-cyan  { background: var(--cyan);  animation: pfloat var(--d) ease-in-out var(--delay) infinite; }
+        @keyframes pfloat {
+            0%,100% { transform: translateY(0) translateX(0); opacity: 0; }
+            15%,85%  { opacity: 0.8; }
+            50%      { transform: translateY(-120px) translateX(40px); }
+        }
+
+        /* ── HEADER ── */
+        .site-header { position: relative; z-index: 10; text-align: center; padding: 64px 24px 32px; }
+        .corner { position: absolute; width: 56px; height: 56px; }
+        .corner-tl { top: 16px; left: 16px; border-top: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+        .corner-tr { top: 16px; right: 16px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+        .corner-bl { bottom: 0; left: 16px; border-bottom: 2px solid var(--gold); border-left: 2px solid var(--gold); }
+        .corner-br { bottom: 0; right: 16px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
+        .eyebrow { display: inline-block; font-family: 'Orbitron', monospace; font-size: 0.65rem; letter-spacing: 0.45em; color: var(--cyan); border: 1px solid rgba(0,245,255,0.28); padding: 5px 18px; margin-bottom: 22px; text-transform: uppercase; }
+        .site-title { font-family: 'Orbitron', monospace; font-size: clamp(2.8rem, 9vw, 6.5rem); font-weight: 900; color: var(--gold); letter-spacing: 0.1em; line-height: 1; text-shadow: 0 0 18px rgba(212,175,55,0.45), 0 0 60px rgba(212,175,55,0.18); margin-bottom: 14px; }
+        .site-sub { font-family: 'Rajdhani', sans-serif; font-size: clamp(0.95rem, 2vw, 1.25rem); letter-spacing: 0.35em; color: rgba(232,232,240,0.5); text-transform: uppercase; }
+
+        .divider { display: flex; align-items: center; justify-content: center; gap: 18px; padding: 0 40px; margin: 28px 0; }
+        .divider-line { flex: 1; max-width: 280px; height: 1px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+        .divider-diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); box-shadow: 0 0 10px var(--gold); flex-shrink: 0; }
+
+        .section-tag   { font-family: 'Orbitron', monospace; font-size: 0.62rem; letter-spacing: 0.45em; color: var(--cyan); opacity: 0.65; text-transform: uppercase; margin-bottom: 8px; }
+        .section-title { font-family: 'Orbitron', monospace; font-size: clamp(1.1rem, 3vw, 1.9rem); color: #fff; font-weight: 600; letter-spacing: 0.05em; }
+
+        /* ════════════════════════════════════════
+           GALLERY — PORTRAIT EXPANDED STRIP
+        ════════════════════════════════════════ */
+        .gallery-section { position: relative; z-index: 10; padding: 48px 0 56px; }
+        .gallery-header  { text-align: center; margin-bottom: 32px; padding: 0 20px; }
+        .gallery-outer   { max-width: 1400px; margin: 0 auto; padding: 0 20px; }
+
+        .gallery-strip {
+            display: flex;
+            gap: 4px;
+            height: 500px;
+            align-items: stretch;
+            overflow: hidden;
+        }
+
+        /* ── Inactive item ── */
+        .strip-item {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid rgba(212,175,55,0.1);
+            opacity: 0.38;
+            filter: brightness(0.55) saturate(0.5);
+            transition:
+                flex         0.6s  cubic-bezier(0.4, 0, 0.2, 1),
+                opacity      0.45s ease,
+                filter       0.45s ease,
+                border-color 0.45s ease,
+                box-shadow   0.45s ease;
+        }
+        .strip-item:hover:not(.active) {
+            opacity: 0.6;
+            filter: brightness(0.75) saturate(0.8);
+            border-color: rgba(212,175,55,0.28);
+        }
+
+        /* ── Active item ── */
+        .strip-item.active {
+            flex: 3;
+            opacity: 1;
+            filter: none;
+            border-color: rgba(212,175,55,0.5);
+            box-shadow: 0 0 28px rgba(212,175,55,0.14), 0 0 60px rgba(212,175,55,0.05);
+            cursor: default;
+        }
+
+        /* Gold top-line on active */
+        .strip-item.active::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 2px;
+            background: linear-gradient(to right, transparent, var(--gold), transparent);
+            z-index: 9;
+        }
+
+        /* ── Blurred background (fills letterbox areas on active) ── */
+        .strip-blur-bg {
+            position: absolute;
+            inset: -12px;
+            background-size: cover;
+            background-position: center;
+            filter: blur(22px) brightness(0.16) saturate(0.5);
+            z-index: 0;
+        }
+
+        /* ── Photo ── */
+        .strip-photo-img {
+            position: absolute; inset: 0;
+            width: 100%; height: 100%;
+            display: block;
+            z-index: 1;
+            transition: transform 0.6s ease;
+        }
+
+        /* Inactive: cover-crop → artistic thin slice of portrait */
+        .strip-item:not(.active) .strip-photo-img {
+            object-fit: cover;
+            object-position: center 20%;
+        }
+
+        /* Active: contain → full portrait visible, blur fills sides */
+        .strip-item.active .strip-photo-img {
+            object-fit: contain;
+            object-position: center;
+        }
+        .strip-item.active:hover .strip-photo-img { transform: scale(1.018); }
+
+        /* ── Slot number on inactive (vertical) ── */
+        .strip-num {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(180deg);
+            writing-mode: vertical-rl;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.4rem;
+            letter-spacing: 0.22em;
+            color: rgba(212,175,55,0.55);
+            z-index: 5;
+            white-space: nowrap;
+            pointer-events: none;
+            text-shadow: 0 0 8px rgba(0,0,0,0.9);
+            transition: opacity 0.35s, color 0.3s;
+        }
+        .strip-item:hover:not(.active) .strip-num { color: rgba(212,175,55,0.9); }
+        .strip-item.active .strip-num { opacity: 0; }
+
+        /* ── Gold corner brackets (active only) ── */
+        .gc { position: absolute; width: 18px; height: 18px; z-index: 8; opacity: 0; transition: opacity 0.45s 0.18s; }
+        .strip-item.active .gc { opacity: 1; }
+        .gc-tl { top: 10px;    left: 10px;  border-top: 2px solid var(--gold); border-left:  2px solid var(--gold); }
+        .gc-tr { top: 10px;    right: 10px; border-top: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+        .gc-bl { bottom: 10px; left: 10px;  border-bottom: 2px solid var(--gold); border-left:  2px solid var(--gold); }
+        .gc-br { bottom: 10px; right: 10px; border-bottom: 2px solid var(--gold); border-right: 2px solid var(--gold); }
+
+        /* ── Name caption — slides up on active ── */
+        .strip-caption {
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            padding: 40px 14px 13px;
+            background: linear-gradient(to top, rgba(4,4,14,0.88) 0%, transparent 100%);
+            z-index: 7;
+            opacity: 0;
+            transform: translateY(6px);
+            transition: opacity 0.45s 0.2s, transform 0.45s 0.2s;
+            pointer-events: none;
+        }
+        .strip-item.active .strip-caption { opacity: 1; transform: translateY(0); }
+
+        .strip-caption-name {
+            font-family: 'Orbitron', monospace;
+            font-size: 0.82rem;
+            font-weight: 700;
+            letter-spacing: 0.28em;
+            color: var(--gold);
+            text-shadow: 0 0 12px rgba(212,175,55,0.45);
+        }
+        .strip-caption-sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            color: rgba(232,232,240,0.45);
+            text-transform: uppercase;
+            margin-top: 2px;
+        }
+
+        /* ── Slot badge top-right of active ── */
+        .strip-badge {
+            position: absolute;
+            top: 10px; right: 12px;
+            font-family: 'Orbitron', monospace;
+            font-size: 0.44rem;
+            color: rgba(0,245,255,0.4);
+            letter-spacing: 0.28em;
+            z-index: 8;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s 0.25s;
+        }
+        .strip-item.active .strip-badge { opacity: 1; }
+
+        /* ── Gallery navigation ── */
+        .gallery-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 20px; }
+
+        .gallery-arrow {
+            width: 42px; height: 42px;
+            background: rgba(4,4,14,0.94);
+            border: 1px solid rgba(0,245,255,0.28);
+            color: var(--cyan); font-size: 1.5rem;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            outline: none; padding: 0; line-height: 1;
+            transition: all 0.25s; flex-shrink: 0;
+        }
+        .gallery-arrow:hover { background: rgba(0,245,255,0.1); border-color: var(--cyan); box-shadow: 0 0 14px rgba(0,245,255,0.2); color: #fff; }
+        .gallery-arrow:disabled { opacity: 0.18; cursor: default; pointer-events: none; }
+
+        .gallery-dots { display: flex; align-items: center; gap: 8px; }
+        .gallery-dot  { width: 5px; height: 5px; border-radius: 50%; background: rgba(212,175,55,0.18); border: 1px solid rgba(212,175,55,0.36); cursor: pointer; transition: all 0.3s; }
+        .gallery-dot.active { background: var(--gold); box-shadow: 0 0 8px rgba(212,175,55,0.5); width: 20px; border-radius: 2px; }
+
+        .gallery-counter { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.25em; color: rgba(0,245,255,0.4); min-width: 56px; text-align: center; }
+
+        /* ════════════════════════════════════════
+           ORBIT SECTION
+        ════════════════════════════════════════ */
+        .orbit-section { position: relative; z-index: 10; padding: 48px 20px 56px; }
+        .orbit-wrapper { position: relative; width: 680px; height: 680px; margin: 0 auto; max-width: 100%; }
+
+        .orbit-ring { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 520px; height: 520px; border-radius: 50%; border: 1px solid rgba(0,245,255,0.08); animation: spin-ring 50s linear infinite; }
+        .orbit-ring::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 562px; height: 562px; border-radius: 50%; border: 1px dashed rgba(212,175,55,0.12); }
+        .orbit-ring::after  { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 478px; height: 478px; border-radius: 50%; border: 1px dashed rgba(157,78,221,0.1); }
+        @keyframes spin-ring { to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+        .orbit-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 172px; height: 172px; border-radius: 50%; background: radial-gradient(circle, rgba(212,175,55,0.12) 0%, rgba(4,4,14,0.95) 70%); border: 2px solid rgba(212,175,55,0.38); box-shadow: 0 0 28px rgba(212,175,55,0.18), inset 0 0 24px rgba(212,175,55,0.08); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 5; animation: pulse-center 3s ease-in-out infinite; }
+        @keyframes pulse-center {
+            0%,100% { box-shadow: 0 0 28px rgba(212,175,55,0.18), inset 0 0 24px rgba(212,175,55,0.08); }
+            50%      { box-shadow: 0 0 44px rgba(212,175,55,0.28), inset 0 0 32px rgba(212,175,55,0.14); }
+        }
+        .orbit-center-text { font-family: 'Orbitron', monospace; font-size: 0.7rem; color: var(--gold); letter-spacing: 0.18em; text-align: center; line-height: 1.6; text-shadow: 0 0 10px rgba(212,175,55,0.4); }
+        .orbit-center-icon { font-size: 1.6rem; margin-bottom: 6px; }
+
+        .orbit-cards { position: absolute; inset: 0; }
+        .orbit-card-wrap { position: absolute; top: 50%; left: 50%; width: 138px; height: 158px; margin-left: -69px; margin-top: -79px; }
+        .orbit-card-wrap.cp-1 { transform: rotate(0deg)   translateY(-260px) rotate(0deg);    }
+        .orbit-card-wrap.cp-2 { transform: rotate(60deg)  translateY(-260px) rotate(-60deg);  }
+        .orbit-card-wrap.cp-3 { transform: rotate(120deg) translateY(-260px) rotate(-120deg); }
+        .orbit-card-wrap.cp-4 { transform: rotate(180deg) translateY(-260px) rotate(-180deg); }
+        .orbit-card-wrap.cp-5 { transform: rotate(240deg) translateY(-260px) rotate(-240deg); }
+        .orbit-card-wrap.cp-6 { transform: rotate(300deg) translateY(-260px) rotate(-300deg); }
+
+        .orbit-card { width: 100%; height: 100%; background: var(--card-bg); border: 1px solid rgba(212,175,55,0.28); backdrop-filter: blur(12px); padding: 16px 12px; text-align: center; cursor: pointer; position: relative; overflow: hidden; transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s; }
+        .orbit-card::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: linear-gradient(to right, transparent, var(--gold), transparent); }
+        .orbit-card::after  { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, transparent 60%, rgba(212,175,55,0.04)); pointer-events: none; }
+        .orbit-card:hover { border-color: var(--gold); box-shadow: 0 0 24px rgba(212,175,55,0.28), 0 0 48px rgba(212,175,55,0.1); transform: scale(1.06); }
+        .card-icon  { font-size: 1.7rem; margin-bottom: 7px; display: block; }
+        .card-time  { font-family: 'Orbitron', monospace; font-size: 0.6rem; color: var(--cyan); letter-spacing: 0.18em; margin-bottom: 5px; }
+        .card-title { font-family: 'Rajdhani', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 4px; }
+        .card-desc  { font-size: 0.68rem; color: rgba(232,232,240,0.48); line-height: 1.35; }
+
+        /* ════════════════════════════════════════
+           COUNTDOWN TIMER
+        ════════════════════════════════════════ */
+        .timer-section { position: relative; z-index: 10; padding: 40px 20px 80px; text-align: center; }
+        .timer-label { font-family: 'Orbitron', monospace; font-size: 0.7rem; letter-spacing: 0.5em; color: rgba(0,245,255,0.65); text-transform: uppercase; margin-bottom: 32px; }
+
+        .timer-frame { display: inline-block; padding: 44px 56px; background: rgba(0,6,16,0.85); border: 1px solid rgba(0,245,255,0.18); position: relative; }
+        .timer-frame::before { content: ''; position: absolute; top: -1px; left: -1px; width: 24px; height: 24px; border-top: 2px solid var(--cyan); border-left: 2px solid var(--cyan); }
+        .timer-frame::after  { content: ''; position: absolute; bottom: -1px; right: -1px; width: 24px; height: 24px; border-bottom: 2px solid var(--cyan); border-right: 2px solid var(--cyan); }
+        .timer-frame-inner { position: relative; }
+        .timer-frame-inner::before { content: ''; position: absolute; top: -1px; right: -1px; width: 24px; height: 24px; border-top: 2px solid rgba(0,245,255,0.4); border-right: 2px solid rgba(0,245,255,0.4); }
+        .timer-frame-inner::after  { content: ''; position: absolute; bottom: -1px; left: -1px; width: 24px; height: 24px; border-bottom: 2px solid rgba(0,245,255,0.4); border-left: 2px solid rgba(0,245,255,0.4); }
+
+        .timer-display { display: flex; align-items: flex-end; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .timer-unit    { display: flex; flex-direction: column; align-items: center; }
+        .timer-digits  {
+            font-family: 'Orbitron', monospace;
+            font-size: clamp(3.2rem, 12vw, 7.5rem);
+            font-weight: 900; color: #00f5ff;
+            letter-spacing: 0.04em; line-height: 1;
+            text-shadow: 0 0 8px #00f5ff, 0 0 18px #00f5ff, 0 0 36px #00f5ff, 0 0 72px rgba(0,245,255,0.45), 0 0 140px rgba(0,245,255,0.2);
+            animation: neon-pulse 2.8s ease-in-out infinite, neon-flicker 7s ease-in-out infinite;
+        }
+        .timer-unit-label { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.35em; color: rgba(0,245,255,0.45); margin-top: 10px; text-transform: uppercase; }
+        .timer-sep { font-family: 'Orbitron', monospace; font-size: clamp(2rem, 9vw, 5.5rem); font-weight: 900; color: var(--purple); line-height: 1; text-shadow: 0 0 8px var(--purple), 0 0 20px var(--purple), 0 0 40px rgba(157,78,221,0.45); margin-bottom: 28px; animation: blink-sep 1s step-end infinite; }
+
+        @keyframes blink-sep   { 0%,100% { opacity: 1; } 50% { opacity: 0.15; } }
+        @keyframes neon-pulse  { 0%,100% { text-shadow: 0 0 8px #00f5ff, 0 0 18px #00f5ff, 0 0 36px #00f5ff, 0 0 72px rgba(0,245,255,0.45), 0 0 140px rgba(0,245,255,0.2); } 50% { text-shadow: 0 0 12px #00f5ff, 0 0 28px #00f5ff, 0 0 56px #00f5ff, 0 0 100px rgba(0,245,255,0.55), 0 0 180px rgba(0,245,255,0.28); } }
+        @keyframes neon-flicker { 0%,94%,96%,98%,100% { opacity: 1; } 95%,97%,99% { opacity: 0.82; } }
+
+        .timer-ended { color: var(--gold) !important; text-shadow: 0 0 20px rgba(212,175,55,0.8) !important; }
+        .access-note { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.35em; color: rgba(255,255,255,0.18); margin-top: 20px; }
+
+        /* ── FOOTER ── */
+        .site-footer { position: relative; z-index: 10; text-align: center; padding: 20px; border-top: 1px solid rgba(212,175,55,0.1); }
+        .site-footer span { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.4em; color: rgba(212,175,54,0.3); }
+
+        /* ════════════════════════════════════════
+           RESPONSIVE
+        ════════════════════════════════════════ */
+        @media (max-width: 1024px) {
+            .gallery-strip { height: 400px; }
+            .strip-item.active { flex: 3.8; }
+        }
+        @media (max-width: 720px) {
+            .gallery-strip { height: 320px; }
+            .strip-item.active { flex: 3.5; }
+            .strip-caption-name { font-size: 0.68rem; }
+            .orbit-wrapper { width: 420px; height: 420px; }
+            .orbit-ring { width: 320px; height: 320px; }
+            .orbit-ring::before { width: 348px; height: 348px; }
+            .orbit-ring::after  { width: 292px; height: 292px; }
+            .orbit-center { width: 120px; height: 120px; }
+            .orbit-card-wrap { width: 110px; height: 128px; margin-left: -55px; margin-top: -64px; }
+            .orbit-card-wrap.cp-1 { transform: rotate(0deg)   translateY(-160px) rotate(0deg);    }
+            .orbit-card-wrap.cp-2 { transform: rotate(60deg)  translateY(-160px) rotate(-60deg);  }
+            .orbit-card-wrap.cp-3 { transform: rotate(120deg) translateY(-160px) rotate(-120deg); }
+            .orbit-card-wrap.cp-4 { transform: rotate(180deg) translateY(-160px) rotate(-180deg); }
+            .orbit-card-wrap.cp-5 { transform: rotate(240deg) translateY(-160px) rotate(-240deg); }
+            .orbit-card-wrap.cp-6 { transform: rotate(300deg) translateY(-160px) rotate(-300deg); }
+            .timer-frame { padding: 32px 24px; }
+        }
+        @media (max-width: 520px) {
+            .gallery-strip { height: 260px; gap: 3px; }
+            .strip-item.active { flex: 3.2; }
+            .strip-caption-name { font-size: 0.58rem; }
+            .orbit-wrapper { width: 340px; height: 340px; }
+            .orbit-ring { width: 260px; height: 260px; }
+            .orbit-ring::before { width: 282px; height: 282px; }
+            .orbit-ring::after  { width: 238px; height: 238px; }
+            .orbit-center { width: 96px; height: 96px; }
+            .orbit-card-wrap { width: 90px; height: 106px; margin-left: -45px; margin-top: -53px; }
+            .orbit-card { padding: 10px 7px; }
+            .orbit-card-wrap.cp-1 { transform: rotate(0deg)   translateY(-130px) rotate(0deg);    }
+            .orbit-card-wrap.cp-2 { transform: rotate(60deg)  translateY(-130px) rotate(-60deg);  }
+            .orbit-card-wrap.cp-3 { transform: rotate(120deg) translateY(-130px) rotate(-120deg); }
+            .orbit-card-wrap.cp-4 { transform: rotate(180deg) translateY(-130px) rotate(-180deg); }
+            .orbit-card-wrap.cp-5 { transform: rotate(240deg) translateY(-130px) rotate(-240deg); }
+            .orbit-card-wrap.cp-6 { transform: rotate(300deg) translateY(-130px) rotate(-300deg); }
+            .card-icon { font-size: 1.1rem; margin-bottom: 4px; }
+            .card-time { font-size: 0.5rem; }
+            .card-title { font-size: 0.75rem; }
+            .card-desc  { font-size: 0.6rem; }
+            .timer-frame { padding: 24px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="ambient ambient-1"></div>
+<div class="ambient ambient-2"></div>
+<div class="particle particle-gold" style="--d:9s;  --delay:0s;   left:8%;  top:15%;"></div>
+<div class="particle particle-gold" style="--d:13s; --delay:2s;   left:28%; top:55%;"></div>
+<div class="particle particle-gold" style="--d:8s;  --delay:4s;   left:65%; top:75%;"></div>
+<div class="particle particle-gold" style="--d:11s; --delay:1s;   left:82%; top:35%;"></div>
+<div class="particle particle-cyan" style="--d:10s; --delay:0.5s; left:45%; top:25%;"></div>
+<div class="particle particle-cyan" style="--d:14s; --delay:3s;   left:72%; top:65%;"></div>
+<div class="particle particle-cyan" style="--d:7s;  --delay:5s;   left:18%; top:80%;"></div>
+<div class="particle particle-gold" style="--d:12s; --delay:1.5s; left:55%; top:90%;"></div>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="site-header">
+    <div class="corner corner-tl"></div>
+    <div class="corner corner-tr"></div>
+    <div class="corner corner-bl"></div>
+    <div class="corner corner-br"></div>
+    <div class="eyebrow">&#x25C6;&nbsp;&nbsp;EXCLUSIVE INVITATION&nbsp;&nbsp;&#x25C6;</div>
+    <h1 class="site-title">THE GATHERING</h1>
+    <p class="site-sub">A Private Evening Experience</p>
+    <div class="divider mt-4">
+        <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+    </div>
+</header>
+
+<!-- ═══════════ GALLERY ═══════════ -->
+<section class="gallery-section">
+    <div class="gallery-header">
+        <div class="section-tag">// GALLERY</div>
+        <h2 class="section-title">MOMENTS OF THE EVENING</h2>
+    </div>
+
+    <div class="gallery-outer">
+        <div class="gallery-strip" id="galleryStrip">
+
+            <div class="strip-item active" data-idx="0">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('zak.jpg')"></div>
+                <img class="strip-photo-img" src="zak.jpg" alt="" loading="eager">
+                <div class="strip-num">01</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">ZAK</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">01 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="1">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('tava.jpg')"></div>
+                <img class="strip-photo-img" src="tava.jpg" alt="" loading="lazy">
+                <div class="strip-num">02</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">TAVA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">02 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="2">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('lalu.jpg')"></div>
+                <img class="strip-photo-img" src="lalu.jpg" alt="" loading="lazy">
+                <div class="strip-num">03</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">LALU</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">03 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="3">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
+                <img class="strip-photo-img" src="amoamo.jpg" alt="" loading="lazy">
+                <div class="strip-num">04</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">AMOAMO</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">04 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="4">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('guduna.jpg')"></div>
+                <img class="strip-photo-img" src="guduna.jpg" alt="" loading="lazy">
+                <div class="strip-num">05</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">GUDUNA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">05 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="5">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('tsurama.jpg')"></div>
+                <img class="strip-photo-img" src="tsurama.jpg" alt="" loading="lazy">
+                <div class="strip-num">06</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">TSURAMA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">06 / 07</div>
+            </div>
+
+            <div class="strip-item" data-idx="6">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('xeo.jpg')"></div>
+                <img class="strip-photo-img" src="xeo.jpg" alt="" loading="lazy">
+                <div class="strip-num">07</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">XEO</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">07 / 07</div>
+            </div>
+
+        </div><!-- /.gallery-strip -->
+
+        <div class="gallery-nav">
+            <button class="gallery-arrow" id="galleryPrev" aria-label="Previous" disabled>&#8249;</button>
+            <div class="gallery-dots" id="galleryDots"></div>
+            <div class="gallery-counter" id="galleryCounter">01 / 07</div>
+            <button class="gallery-arrow" id="galleryNext" aria-label="Next">&#8250;</button>
+        </div>
+
+    </div>
+</section>
+
+<!-- ═══════════ EVENT PROGRAM ═══════════ -->
+<div class="divider" style="position:relative;z-index:10;">
+    <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+</div>
+
+<section class="orbit-section">
+    <div class="text-center mb-5">
+        <div class="section-tag">// EVENT PROGRAM</div>
+        <h2 class="section-title">SCHEDULE OF THE EVENING</h2>
+    </div>
+    <div class="orbit-wrapper">
+        <div class="orbit-ring"></div>
+        <div class="orbit-center">
+            <div class="orbit-center-icon">✦</div>
+            <div class="orbit-center-text">PRIVATE<br>EVENT</div>
+        </div>
+        <div class="orbit-cards">
+            <div class="orbit-card-wrap cp-1"><div class="orbit-card"><span class="card-icon">🥂</span><div class="card-time">20:00</div><div class="card-title">Cocktails</div><div class="card-desc">Welcome drinks &amp; mingling</div></div></div>
+            <div class="orbit-card-wrap cp-2"><div class="orbit-card"><span class="card-icon">🎵</span><div class="card-time">21:00</div><div class="card-title">Live Set</div><div class="card-desc">DJ performance begins</div></div></div>
+            <div class="orbit-card-wrap cp-3"><div class="orbit-card"><span class="card-icon">🍽️</span><div class="card-time">22:00</div><div class="card-title">Dinner</div><div class="card-desc">Private dining experience</div></div></div>
+            <div class="orbit-card-wrap cp-4"><div class="orbit-card"><span class="card-icon">🎭</span><div class="card-time">23:00</div><div class="card-title">Show</div><div class="card-desc">Live performance</div></div></div>
+            <div class="orbit-card-wrap cp-5"><div class="orbit-card"><span class="card-icon">🥃</span><div class="card-time">00:00</div><div class="card-title">Toast</div><div class="card-desc">Midnight celebration</div></div></div>
+            <div class="orbit-card-wrap cp-6"><div class="orbit-card"><span class="card-icon">✨</span><div class="card-time">01:00</div><div class="card-title">After Party</div><div class="card-desc">Continue the night</div></div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ COUNTDOWN ═══════════ -->
+<section class="timer-section">
+    <div class="divider mb-5">
+        <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+    </div>
+    <div class="timer-label">&#x2AFD;&nbsp; COUNTDOWN TO EVENT &nbsp;&#x2AFD;</div>
+    <div class="timer-frame">
+        <div class="timer-frame-inner">
+            <div class="timer-display">
+                <div class="timer-unit"><div class="timer-digits" id="t-hours">46</div><div class="timer-unit-label">Hours</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-minutes">00</div><div class="timer-unit-label">Minutes</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-seconds">00</div><div class="timer-unit-label">Seconds</div></div>
+            </div>
+        </div>
+    </div>
+    <p class="access-note">ACCESS GRANTED &mdash; INVITATION ONLY</p>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer class="site-footer">
+    <div class="divider mb-3">
+        <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+    </div>
+    <span>THE GATHERING &nbsp;&#x25C6;&nbsp; PRIVATE EVENT &nbsp;&#x25C6;&nbsp; ALL RIGHTS RESERVED</span>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+/* ── COUNTDOWN ── */
+(function () {
+    const end = Date.now() + 46 * 60 * 60 * 1000;
+    const elH = document.getElementById('t-hours');
+    const elM = document.getElementById('t-minutes');
+    const elS = document.getElementById('t-seconds');
+    const pad = n => String(n).padStart(2, '0');
+    function tick() {
+        const t = Math.max(0, Math.floor((end - Date.now()) / 1000));
+        elH.textContent = pad(Math.floor(t / 3600));
+        elM.textContent = pad(Math.floor((t % 3600) / 60));
+        elS.textContent = pad(t % 60);
+        if (!t) [elH, elM, elS].forEach(el => el.classList.add('timer-ended'));
+    }
+    tick();
+    setInterval(tick, 1000);
+})();
+
+/* ── GALLERY ── */
+(function () {
+    const strip    = document.getElementById('galleryStrip');
+    const btnPrev  = document.getElementById('galleryPrev');
+    const btnNext  = document.getElementById('galleryNext');
+    const dotsWrap = document.getElementById('galleryDots');
+    const counter  = document.getElementById('galleryCounter');
+    const items    = Array.from(strip.querySelectorAll('.strip-item'));
+    const N        = items.length;
+    let   cur      = 0;
+
+    /* Build dots */
+    items.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'gallery-dot' + (i === 0 ? ' active' : '');
+        d.addEventListener('click', () => setActive(i));
+        dotsWrap.appendChild(d);
+    });
+    const dots = Array.from(dotsWrap.querySelectorAll('.gallery-dot'));
+
+    function setActive(i) {
+        i = Math.max(0, Math.min(N - 1, i));
+        if (i === cur) return;
+        items[cur].classList.remove('active');
+        dots[cur].classList.remove('active');
+        cur = i;
+        items[cur].classList.add('active');
+        dots[cur].classList.add('active');
+        counter.textContent = String(cur + 1).padStart(2, '0') + ' / ' + String(N).padStart(2, '0');
+        btnPrev.disabled = (cur === 0);
+        btnNext.disabled = (cur === N - 1);
+    }
+
+    /* Click inactive item → expand */
+    items.forEach((item, i) => {
+        item.addEventListener('click', () => {
+            if (!item.classList.contains('active')) setActive(i);
+        });
+    });
+
+    btnPrev.addEventListener('click', () => setActive(cur - 1));
+    btnNext.addEventListener('click', () => setActive(cur + 1));
+
+    /* Keyboard */
+    document.addEventListener('keydown', e => {
+        if (e.key === 'ArrowLeft')  setActive(cur - 1);
+        if (e.key === 'ArrowRight') setActive(cur + 1);
+    });
+
+    /* Touch swipe */
+    let tx = 0;
+    strip.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, { passive: true });
+    strip.addEventListener('touchend',   e => {
+        const dx = e.changedTouches[0].clientX - tx;
+        if (Math.abs(dx) > 40) setActive(cur + (dx < 0 ? 1 : -1));
+    });
+
+    /* Auto-advance */
+    let autoId, dir = 1;
+    function step() {
+        let n = cur + dir;
+        if (n >= N) { dir = -1; n = N - 2; }
+        if (n <  0) { dir =  1; n = 1; }
+        setActive(n);
+    }
+    function startAuto() { autoId = setInterval(step, 4500); }
+    function stopAuto()  { clearInterval(autoId); }
+    strip.addEventListener('mouseenter', stopAuto);
+    strip.addEventListener('mouseleave', startAuto);
+    strip.addEventListener('touchstart', stopAuto, { passive: true });
+    strip.addEventListener('touchend',   () => setTimeout(startAuto, 6000), { passive: true });
+    startAuto();
+})();
+</script>
+</body>
+</html>
