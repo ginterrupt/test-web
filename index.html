@@ -329,6 +329,180 @@
         .timer-ended { color: var(--gold) !important; text-shadow: 0 0 20px rgba(212,175,55,0.8) !important; }
         .access-note { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.35em; color: rgba(255,255,255,0.18); margin-top: 20px; }
 
+        /* ════════════════════════════════════════
+           EVENING PHOTOS
+        ════════════════════════════════════════ */
+        .photos-section { position: relative; z-index: 10; padding: 48px 20px 56px; }
+        .photos-outer   { max-width: 1200px; margin: 0 auto; }
+
+        .photos-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .photo-card {
+            max-width: 520px;
+            width: 100%;
+            margin-bottom: 0;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(212,175,55,0.1);
+            cursor: pointer;
+            display: block;
+        }
+        .photo-card::after {
+            content: '';
+            position: absolute; inset: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(4,4,14,0.7) 100%);
+            opacity: 0;
+            transition: opacity 0.35s;
+        }
+        .photo-card:hover::after { opacity: 1; }
+        .photo-card img {
+            display: block; width: 100%; height: auto;
+            filter: brightness(0.88) saturate(0.85);
+            transition: transform 0.55s cubic-bezier(0.4,0,0.2,1), filter 0.4s;
+        }
+        .photo-card:hover img {
+            transform: scale(1.04);
+            filter: brightness(1) saturate(1);
+        }
+        .photo-card-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            padding: 28px 14px 12px;
+            background: linear-gradient(to top, rgba(4,4,14,0.9), transparent);
+            font-family: 'Orbitron', monospace; font-size: 0.5rem;
+            letter-spacing: 0.3em; color: rgba(212,175,55,0.7);
+            opacity: 0; transform: translateY(4px);
+            transition: opacity 0.35s 0.05s, transform 0.35s 0.05s;
+            z-index: 2;
+        }
+        .photo-card:hover .photo-card-overlay { opacity: 1; transform: translateY(0); }
+
+        /* ── Lightbox ── */
+        .lb-overlay {
+            position: fixed; inset: 0; z-index: 1000;
+            background: rgba(4,4,14,0.96);
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .lb-overlay.open { opacity: 1; pointer-events: all; }
+
+        .lb-img-wrap {
+            position: relative; max-width: 90vw; max-height: 88vh;
+            border: 1px solid rgba(212,175,55,0.28);
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        }
+        .lb-img-wrap img { display: block; max-width: 90vw; max-height: 88vh; object-fit: contain; }
+
+        .lb-close {
+            position: fixed; top: 20px; right: 24px;
+            font-family: 'Orbitron', monospace; font-size: 1.4rem;
+            color: rgba(212,175,55,0.6); cursor: pointer; z-index: 1001;
+            background: none; border: none; outline: none; line-height: 1;
+            transition: color 0.2s;
+        }
+        .lb-close:hover { color: var(--gold); }
+
+        .lb-nav {
+            position: fixed; top: 50%; transform: translateY(-50%);
+            background: rgba(4,4,14,0.7); border: 1px solid rgba(0,245,255,0.2);
+            color: var(--cyan); font-size: 1.8rem; width: 48px; height: 48px;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            outline: none; transition: background 0.2s, border-color 0.2s; z-index: 1001;
+        }
+        .lb-nav:hover { background: rgba(0,245,255,0.1); border-color: var(--cyan); }
+        .lb-prev { left: 12px; }
+        .lb-next { right: 12px; }
+
+        /* ════════════════════════════════════════
+           LEADERBOARD
+        ════════════════════════════════════════ */
+        .leaderboard-section { position: relative; z-index: 10; padding: 48px 20px 56px; }
+        .leaderboard-outer   { max-width: 860px; margin: 0 auto; }
+
+        .lb-table { width: 100%; border-collapse: separate; border-spacing: 0 6px; }
+
+        .lb-row {
+            background: rgba(8,8,24,0.85);
+            border: 1px solid rgba(212,175,55,0.12);
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.25s;
+            cursor: default;
+        }
+        .lb-row:hover {
+            border-color: rgba(212,175,55,0.38);
+            box-shadow: 0 0 22px rgba(212,175,55,0.1);
+            transform: translateX(3px);
+        }
+
+        .lb-row td { padding: 14px 18px; vertical-align: middle; }
+
+        /* rank column */
+        .lb-rank {
+            width: 54px; text-align: center;
+            font-family: 'Orbitron', monospace; font-size: 1rem; font-weight: 700;
+            letter-spacing: 0.05em;
+        }
+        .rank-1 { color: #ffd700; text-shadow: 0 0 12px rgba(255,215,0,0.65); }
+        .rank-2 { color: #c0c0c0; text-shadow: 0 0 10px rgba(192,192,192,0.5); }
+        .rank-3 { color: #cd7f32; text-shadow: 0 0 10px rgba(205,127,50,0.5); }
+        .rank-rest { color: rgba(232,232,240,0.28); font-size: 0.75rem; }
+
+        /* medal badge top-3 */
+        .lb-medal { font-size: 1.25rem; line-height: 1; }
+
+        /* name column */
+        .lb-name {
+            font-family: 'Orbitron', monospace; font-size: 0.82rem; font-weight: 600;
+            letter-spacing: 0.18em; color: #e8e8f0;
+        }
+        .lb-row:nth-child(1) .lb-name { color: #ffd700; }
+        .lb-row:nth-child(2) .lb-name { color: #d0d0d0; }
+        .lb-row:nth-child(3) .lb-name { color: #cd7f32; }
+
+        /* chips column */
+        .lb-chips {
+            font-family: 'Orbitron', monospace; font-size: 0.78rem; font-weight: 600;
+            color: var(--cyan); letter-spacing: 0.12em; text-align: right; white-space: nowrap;
+        }
+        .lb-chips-label { font-size: 0.5rem; color: rgba(0,245,255,0.4); letter-spacing: 0.3em; display: block; text-align: right; margin-top: 2px; }
+
+        /* bar column */
+        .lb-bar-col { width: 28%; min-width: 80px; }
+        .lb-bar-track { height: 4px; background: rgba(255,255,255,0.07); border-radius: 2px; overflow: hidden; }
+        .lb-bar-fill  { height: 100%; border-radius: 2px; background: linear-gradient(to right, var(--purple), var(--cyan)); transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+
+        /* status badge */
+        .lb-status {
+            font-family: 'Orbitron', monospace; font-size: 0.46rem; letter-spacing: 0.25em;
+            padding: 3px 8px; border-radius: 2px; white-space: nowrap; text-align: center;
+        }
+        .lb-status.in    { color: var(--cyan);  border: 1px solid rgba(0,245,255,0.3);  background: rgba(0,245,255,0.06); }
+        .lb-status.out   { color: rgba(232,232,240,0.3); border: 1px solid rgba(232,232,240,0.1); background: transparent; }
+        .lb-status.leader{ color: var(--gold);  border: 1px solid rgba(212,175,55,0.4); background: rgba(212,175,55,0.07); }
+
+        /* top-3 row highlight line */
+        .lb-row.top-1 { border-color: rgba(255,215,0,0.28); }
+        .lb-row.top-2 { border-color: rgba(192,192,192,0.2); }
+        .lb-row.top-3 { border-color: rgba(205,127,50,0.2); }
+        .lb-row.top-1::after,
+        .lb-row.top-2::after,
+        .lb-row.top-3::after { content: ''; display: table-row; }
+
+        .lb-row.top-1 td:first-child { border-left: 2px solid #ffd700; }
+        .lb-row.top-2 td:first-child { border-left: 2px solid #c0c0c0; }
+        .lb-row.top-3 td:first-child { border-left: 2px solid #cd7f32; }
+
+        @media (max-width: 600px) {
+            .lb-bar-col, .lb-status-col { display: none; }
+            .lb-row td { padding: 12px 10px; }
+            .lb-name { font-size: 0.7rem; }
+            .lb-chips { font-size: 0.68rem; }
+        }
+
         /* ── FOOTER ── */
         .site-footer { position: relative; z-index: 10; text-align: center; padding: 20px; border-top: 1px solid rgba(212,175,55,0.1); }
         .site-footer span { font-family: 'Orbitron', monospace; font-size: 0.55rem; letter-spacing: 0.4em; color: rgba(212,175,54,0.3); }
@@ -434,124 +608,137 @@
                     <div class="strip-caption-name">ZAK</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">01 / 10</div>
+                <div class="strip-badge">01 / 11</div>
             </div>
-
-            <div class="strip-item" data-idx="1">
-                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
-                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
-                <div class="strip-blur-bg" style="background-image:url('guduna.jpg')"></div>
-                <img class="strip-photo-img" src="guduna.jpg" alt="" loading="lazy">
-                <div class="strip-num">05</div>
-                <div class="strip-caption">
-                    <div class="strip-caption-name">GUDUNA</div>
-                    <div class="strip-caption-sub">The Evening</div>
-                </div>
-                <div class="strip-badge">02 / 10</div>
-            </div>
-
-
 
             <div class="strip-item" data-idx="2">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
-                <div class="strip-blur-bg" style="background-image:url('lalu.jpg')"></div>
-                <img class="strip-photo-img" src="lalu.jpg" alt="" loading="lazy">
+                <div class="strip-blur-bg" style="background-image:url('guduna.jpg')"></div>
+                <img class="strip-photo-img" src="lizi.jpeg" alt="" loading="lazy">
                 <div class="strip-num">03</div>
                 <div class="strip-caption">
-                    <div class="strip-caption-name">LALU</div>
+                    <div class="strip-caption-name">LIZI</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">03 / 10</div>
+                <div class="strip-badge">02 / 11</div>
             </div>
+
+            <div class="strip-item" data-idx="2">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('guduna.jpg')"></div>
+                <img class="strip-photo-img" src="guduna.jpg" alt="" loading="lazy">
+                <div class="strip-num">03</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">GUDUNA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">03 / 11</div>
+            </div>
+
+
 
             <div class="strip-item" data-idx="3">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('lalu.jpg')"></div>
+                <img class="strip-photo-img" src="lalu.jpg" alt="" loading="lazy">
+                <div class="strip-num">04</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">LALU</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">04 / 11</div>
+            </div>
+
+            <div class="strip-item" data-idx="4">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
                 <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
                 <img class="strip-photo-img" src="maka.jpg" alt="" loading="lazy">
-                <div class="strip-num">04</div>
+                <div class="strip-num">05</div>
                 <div class="strip-caption">
                     <div class="strip-caption-name">MAKA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">04 / 10</div>
-            </div>
-            
-            <div class="strip-item" data-idx="6">
-                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
-                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
-                <div class="strip-blur-bg" style="background-image:url('xeo.jpg')"></div>
-                <img class="strip-photo-img" src="xeo.jpg" alt="" loading="lazy">
-                <div class="strip-num">07</div>
-                <div class="strip-caption">
-                    <div class="strip-caption-name">XEO</div>
-                    <div class="strip-caption-sub">The Evening</div>
-                </div>
-                <div class="strip-badge">05 / 10</div>
+                <div class="strip-badge">05 / 11</div>
             </div>
             
             <div class="strip-item" data-idx="5">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
-                <div class="strip-blur-bg" style="background-image:url('tsurama.jpg')"></div>
-                <img class="strip-photo-img" src="tsurama.jpg" alt="" loading="lazy">
+                <div class="strip-blur-bg" style="background-image:url('xeo.jpg')"></div>
+                <img class="strip-photo-img" src="xeo.jpg" alt="" loading="lazy">
                 <div class="strip-num">06</div>
                 <div class="strip-caption">
-                    <div class="strip-caption-name">TSURAMA</div>
+                    <div class="strip-caption-name">XEO</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">06 / 10</div>
+                <div class="strip-badge">06 / 11</div>
             </div>
-
-            <div class="strip-item" data-idx="1">
+            
+            <div class="strip-item" data-idx="6">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
-                <div class="strip-blur-bg" style="background-image:url('tava.jpg')"></div>
-                <img class="strip-photo-img" src="tava.jpg" alt="" loading="lazy">
-                <div class="strip-num">02</div>
+                <div class="strip-blur-bg" style="background-image:url('tsurama.jpg')"></div>
+                <img class="strip-photo-img" src="tsurama.jpg" alt="" loading="lazy">
+                <div class="strip-num">07</div>
                 <div class="strip-caption">
-                    <div class="strip-caption-name">TAVA</div>
+                    <div class="strip-caption-name">TSURAMA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
                 <div class="strip-badge">07 / 10</div>
             </div>
 
-            <div class="strip-item" data-idx="3">
+            <div class="strip-item" data-idx="7">
+                <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
+                <span class="gc gc-bl"></span><span class="gc gc-br"></span>
+                <div class="strip-blur-bg" style="background-image:url('tava.jpg')"></div>
+                <img class="strip-photo-img" src="tava.jpg" alt="" loading="lazy">
+                <div class="strip-num">08</div>
+                <div class="strip-caption">
+                    <div class="strip-caption-name">TAVA</div>
+                    <div class="strip-caption-sub">The Evening</div>
+                </div>
+                <div class="strip-badge">08 / 11</div>
+            </div>
+
+            <div class="strip-item" data-idx="8">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
                 <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
                 <img class="strip-photo-img" src="amoamo.jpg" alt="" loading="lazy">
-                <div class="strip-num">04</div>
+                <div class="strip-num">09</div>
                 <div class="strip-caption">
                     <div class="strip-caption-name">AMOAMO</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">08 / 10</div>
+                <div class="strip-badge">09 / 11</div>
             </div>
-            <div class="strip-item" data-idx="3">
+            <div class="strip-item" data-idx="9">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
                 <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
                 <img class="strip-photo-img" src="guga.jpeg" alt="" loading="lazy">
-                <div class="strip-num">04</div>
+                <div class="strip-num">10</div>
                 <div class="strip-caption">
                     <div class="strip-caption-name">GUGA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">09 / 10</div>
+                <div class="strip-badge">10 / 11</div>
             </div>
-                        <div class="strip-item" data-idx="3">
+                        <div class="strip-item" data-idx="10">
                 <span class="gc gc-tl"></span><span class="gc gc-tr"></span>
                 <span class="gc gc-bl"></span><span class="gc gc-br"></span>
                 <div class="strip-blur-bg" style="background-image:url('amoamo.jpg')"></div>
                 <img class="strip-photo-img" src="kaxa.jpeg" alt="" loading="lazy">
-                <div class="strip-num">04</div>
+                <div class="strip-num">11</div>
                 <div class="strip-caption">
                     <div class="strip-caption-name">KAXA</div>
                     <div class="strip-caption-sub">The Evening</div>
                 </div>
-                <div class="strip-badge">10 / 10</div>
+                <div class="strip-badge">11 / 11</div>
             </div>
 
 
@@ -567,6 +754,72 @@
 
     </div>
 </section>
+
+<!-- ═══════════ LEADERBOARD ═══════════ -->
+<div class="divider" style="position:relative;z-index:10;">
+    <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+</div>
+
+<section class="leaderboard-section">
+    <div class="text-center mb-5">
+        <div class="section-tag">// STANDINGS</div>
+        <h2 class="section-title">POINTS LEADERBOARD</h2>
+    </div>
+    <div class="leaderboard-outer">
+        <table class="lb-table" id="lbTable">
+            <tbody>
+                <!-- rows injected by JS -->
+            </tbody>
+        </table>
+    </div>
+</section>
+<!-- ═══════════ EVENING PHOTOS ═══════════ -->
+<div class="divider" style="position:relative;z-index:10;">
+    <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+</div>
+
+<section class="photos-section">
+    <div class="text-center mb-5">
+        <h2 class="section-title">EVENING PHOTO</h2>
+    </div>
+    <div class="photos-outer">
+        <div class="photos-grid" id="photosGrid">
+            <div class="photo-card" data-src="team.jpeg"><img src="team.jpeg" alt="" loading="lazy"><div class="photo-card-overlay">THE GATHERING</div></div>
+        </div>
+    </div>
+</section>
+
+<!-- ═══════════ COUNTDOWN ═══════════ -->
+<section class="timer-section">
+    <div class="divider mb-5">
+        <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
+    </div>
+    <div class="timer-label">&#x2AFD;&nbsp; COUNTDOWN TO EVENT &nbsp;&#x2AFD;</div>
+    <div class="timer-frame">
+        <div class="timer-frame-inner">
+            <div class="timer-display">
+                <div class="timer-unit"><div class="timer-digits" id="t-days">00</div><div class="timer-unit-label">Days</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-hours">00</div><div class="timer-unit-label">Hours</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-minutes">00</div><div class="timer-unit-label">Minutes</div></div>
+                <div class="timer-sep">:</div>
+                <div class="timer-unit"><div class="timer-digits" id="t-seconds">00</div><div class="timer-unit-label">Seconds</div></div>
+            </div>
+        </div>
+    </div>
+    <p class="access-note">ACCESS GRANTED &mdash; INVITATION ONLY</p>
+</section>
+
+
+
+<!-- Lightbox -->
+<div class="lb-overlay" id="lbOverlay">
+    <button class="lb-close" id="lbClose">&#x2715;</button>
+    <button class="lb-nav lb-prev" id="lbPrev">&#8249;</button>
+    <div class="lb-img-wrap"><img id="lbImg" src="" alt=""></div>
+    <button class="lb-nav lb-next" id="lbNext">&#8250;</button>
+</div>
 
 <!-- ═══════════ EVENT PROGRAM ═══════════ -->
 <div class="divider" style="position:relative;z-index:10;">
@@ -594,29 +847,6 @@
         </div>
     </div>
 </section>
-
-<!-- ═══════════ COUNTDOWN ═══════════ -->
-<section class="timer-section">
-    <div class="divider mb-5">
-        <div class="divider-line"></div><div class="divider-diamond"></div><div class="divider-line"></div>
-    </div>
-    <div class="timer-label">&#x2AFD;&nbsp; COUNTDOWN TO EVENT &nbsp;&#x2AFD;</div>
-    <div class="timer-frame">
-        <div class="timer-frame-inner">
-            <div class="timer-display">
-                <div class="timer-unit"><div class="timer-digits" id="t-days">00</div><div class="timer-unit-label">Days</div></div>
-                <div class="timer-sep">:</div>
-                <div class="timer-unit"><div class="timer-digits" id="t-hours">00</div><div class="timer-unit-label">Hours</div></div>
-                <div class="timer-sep">:</div>
-                <div class="timer-unit"><div class="timer-digits" id="t-minutes">00</div><div class="timer-unit-label">Minutes</div></div>
-                <div class="timer-sep">:</div>
-                <div class="timer-unit"><div class="timer-digits" id="t-seconds">00</div><div class="timer-unit-label">Seconds</div></div>
-            </div>
-        </div>
-    </div>
-    <p class="access-note">ACCESS GRANTED &mdash; INVITATION ONLY</p>
-</section>
-
 <!-- ═══════════ FOOTER ═══════════ -->
 <footer class="site-footer">
     <div class="divider mb-3">
@@ -728,6 +958,104 @@
     }, { passive: true });
 
     startAuto();
+})();
+
+/* ── LEADERBOARD ── */
+(function () {
+    const players = [
+        { name: 'GUDUNA',  point: 100, status: 'leader' },
+        { name: 'TAVA',  point: 80, status: 'in'     },
+        { name: 'LIZI', point: 70, status: 'in'     },
+        { name: 'MAKA',    point: 40, status: 'in'     },
+        { name: 'XEO',     point: 20, status: 'in'     },
+        { name: 'AMO',    point: 10, status: 'in'     },
+        { name: 'GIGA',    point: 10, status: 'in'     },
+        { name: 'TSURAMA',  point:  10, status: 'in'    },
+        { name: 'ZAKRO',    point:     10, status: 'in'    },
+        { name: 'GUGA',    point:  0, status: 'n/a'    },
+        { name: 'KAXA XIMIA',    point:  0, status: 'n/a'    },
+    ];
+
+    players.sort((a, b) => b.point - a.point);
+
+    const medals   = ['🥇', '🥈', '🥉'];
+    const topClass = ['top-1', 'top-2', 'top-3'];
+    const max      = players[0].point || 1;
+    const tbody    = document.querySelector('#lbTable tbody');
+    const fmt      = n => n.toLocaleString('en-US');
+
+    const statusLabel = { leader: 'LEADER', in: 'IN PLAY', out: 'OUT', 'n/a': 'N/A' };
+    const statusCls   = { leader: 'leader', in: 'in', out: 'out', 'n/a': 'out' };
+
+    players.forEach((p, i) => {
+        const rank = i + 1;
+        const pct  = Math.round((p.point / max) * 100);
+        const rankCell = rank <= 3
+            ? `<span class="lb-medal">${medals[i]}</span>`
+            : `<span class="lb-rank rank-rest">${String(rank).padStart(2,'0')}</span>`;
+        const rankClass = rank <= 3 ? `rank-${rank}` : 'rank-rest';
+        const rowExtra  = rank <= 3 ? topClass[i] : '';
+        const sCls      = statusCls[p.status] || 'out';
+        const sLbl      = statusLabel[p.status] || 'N/A';
+
+        const tr = document.createElement('tr');
+        tr.className = `lb-row ${rowExtra}`;
+        tr.innerHTML = `
+            <td class="lb-rank ${rankClass}">${rankCell}</td>
+            <td class="lb-name">${p.name}</td>
+            <td class="lb-bar-col">
+                <div class="lb-bar-track"><div class="lb-bar-fill" style="width:0%" data-pct="${pct}"></div></div>
+            </td>
+            <td class="lb-chips">${p.point > 0 ? fmt(p.point) : '—'}
+                <span class="lb-chips-label">${p.point > 0 ? 'PTS' : 'N/A'}</span>
+            </td>
+            <td class="lb-status-col"><span class="lb-status ${sCls}">${sLbl}</span></td>
+        `;
+        tbody.appendChild(tr);
+    });
+
+    /* Animate bars in after render */
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.lb-bar-fill').forEach(el => {
+            el.style.width = el.dataset.pct + '%';
+        });
+    });
+})();
+
+/* ── EVENING PHOTOS LIGHTBOX ── */
+(function () {
+    const cards   = Array.from(document.querySelectorAll('.photo-card'));
+    const overlay = document.getElementById('lbOverlay');
+    const img     = document.getElementById('lbImg');
+    const btnClose= document.getElementById('lbClose');
+    const btnPrev = document.getElementById('lbPrev');
+    const btnNext = document.getElementById('lbNext');
+    let   cur     = 0;
+
+    function open(i) {
+        cur = i;
+        img.src = cards[cur].dataset.src;
+        overlay.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function close() {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    function prev() { cur = (cur - 1 + cards.length) % cards.length; img.src = cards[cur].dataset.src; }
+    function next() { cur = (cur + 1) % cards.length;                 img.src = cards[cur].dataset.src; }
+
+    cards.forEach((c, i) => c.addEventListener('click', () => open(i)));
+    btnClose.addEventListener('click', close);
+    btnPrev.addEventListener('click', prev);
+    btnNext.addEventListener('click', next);
+    overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+    document.addEventListener('keydown', e => {
+        if (!overlay.classList.contains('open')) return;
+        if (e.key === 'Escape')     close();
+        if (e.key === 'ArrowLeft')  prev();
+        if (e.key === 'ArrowRight') next();
+    });
 })();
 </script>
 </body>
