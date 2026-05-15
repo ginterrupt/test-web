@@ -85,7 +85,7 @@
         .gallery-strip {
             display: flex;
             gap: 4px;
-            height: 500px;
+            height: 680px;
             align-items: stretch;
             overflow: hidden;
         }
@@ -115,7 +115,7 @@
 
         /* ── Active item ── */
         .strip-item.active {
-            flex: 3;
+            flex: 14;
             opacity: 1;
             filter: none;
             border-color: rgba(212,175,55,0.5);
@@ -511,8 +511,8 @@
            RESPONSIVE
         ════════════════════════════════════════ */
         @media (max-width: 1024px) {
-            .gallery-strip { height: 420px; }
-            .strip-item.active { flex: 4.5; }
+            .gallery-strip { height: 520px; }
+            .strip-item.active { flex: 10; }
         }
         @media (max-width: 720px) {
             .gallery-strip { height: 470px; gap: 3px; }
